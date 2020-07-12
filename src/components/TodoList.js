@@ -23,21 +23,23 @@ export default class TodoList extends Component {
   render() {
     return (
       <div>
-        <h3 className="text-capitilize text-center mt-3">Todo List</h3>
-        {
-          this.props.items.map((todoItem) => <TodoItem
-            key = {todoItem.itemId}
-            //      TodoItemProps
-            item={todoItem}
+        <ul className="list-group my-5">
+          <h3 className="text-capitilize text-center mt-3">Todo List</h3>
+          {
+            this.props.items.map((todoItem) => <TodoItem
+              key={todoItem.itemId}
+              //      TodoItemProps
+              item={todoItem}
+              // ---------------------
+              handleDeleteItem={() => this.props.handleDeleteItem(todoItem.itemId)}
+              handleEditItem={() => this.props.handleEditItem(todoItem.itemId)}
             // ---------------------
-            handleDeleteItem={() => this.props.handleDeleteItem(todoItem.itemId)}
-            handleEditItem={() => this.props.handleEditItem(todoItem.itemId)}
-            // ---------------------
-          ></TodoItem>)
-        }
+            ></TodoItem>)
+          }
+        </ul>
         <button
           type="button"
-          className="btn btn-danger btn-lg btn-block p-1"
+          className="btn btn-danger btn-lg btn-block p-1 text-uppercase"
           onClick={this.props.handleClearList}
         >
           Clear List

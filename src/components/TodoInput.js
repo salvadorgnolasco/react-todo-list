@@ -20,9 +20,10 @@ import React, { Component } from 'react';
 
 export default class TodoInput extends Component {
   render() {
+    
     return (
       <div>
-        <h3 className="text-capitilize text-center">Todo input</h3>
+        <h3 className="text-capitalize text-center">Todo input</h3>
         <div className="card card-body my-3">
           <form onSubmit={this.props.handleSubmit}>
             <div className="input-group">
@@ -34,15 +35,21 @@ export default class TodoInput extends Component {
               <input
                 type="text"
                 className="form-control text-capitalize"
-                placeholder="Add todo item..."
+                placeholder="Add todo item"
                 onChange={this.props.handleChange}
                 name="todoItem"
                 value={this.props.description}
               />
             </div>
-            <button type="submit" 
-              className="btn btn-block btn-primary mt-3 text-uppercase"> 
-              Add item 
+            <button
+              type="submit"
+              disabled={this.props.description === ''}
+              className={
+                this.props.editItem ?
+                "btn btn-block btn-success mt-3 text-uppercase" :
+                "btn btn-block btn-primary mt-3 text-uppercase"}
+              >
+              {this.props.editItem ? 'Edit Item' : 'Add item'}
             </button>
           </form>
         </div>

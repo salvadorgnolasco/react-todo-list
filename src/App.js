@@ -48,10 +48,6 @@ export default class App extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
 
-    if (this.state.description === '') {
-      return;
-    }
-
     const newItem = {
       itemId: this.state.itemId,
       description: this.state.description,
@@ -76,11 +72,22 @@ export default class App extends Component {
   }
 
   handleDeleteItem = (itemId) => {
-    console.log('Delete item');
+    const items = this.state.items.filter((item) => item.itemId !== itemId);
+    this.setState({
+      items: items,
+    });
   }
 
   handleEditItem = (itemId) => {
-    console.log('Edit item');
+    const filteredItems = this.state.items.filter((item) => item.itemId !== itemId);
+    const item = this.state.items.find((item) => item.itemId === itemId);
+
+    this.setState({
+      itemId: item.itemId,
+      description: item.description,
+      items: filteredItems,
+      editItem: true,
+    });
   }
 
   render() {
@@ -90,15 +97,15 @@ export default class App extends Component {
           <div className="row">
             <div className="col-10 mx-auto col-md-8 mt-5">
               <TodoInput
-                description={this.state.description}
                 //           TodoInputProps
-                item={''}
+                description={this.state.description}
+                editItem={this.state.editItem}
                 // -------------------------------------
                 handleSubmit={this.handleSubmit}
                 handleChange={this.handleChange}
-                // -------------------------------------
+              // -------------------------------------
               />
-              <TodoList
+              <TodoList 
                 //           TodoListProps
                 // -------------------------------------
                 items={this.state.items.slice()}
