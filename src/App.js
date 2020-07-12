@@ -16,14 +16,19 @@
 * Fecha de creación: 11/07/2020
 */
 
-import React, { Component } from 'react';
 import TodoList from './components/TodoList';
 import TodoInput from './components/TodoInput';
+
 import { v4 as uuidv4 } from 'uuid';
+
+import React, { Component } from 'react';
 
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import 'bootstrap/dist/css/bootstrap.css';
 
+/**
+ * App
+ */
 export default class App extends Component {
   state = {
     items: [
@@ -41,11 +46,33 @@ export default class App extends Component {
   }
 
   handleSubmit = (e) => {
-    console.log('handleSubmit', e);
+    e.preventDefault();
+
+    if (this.state.description === '') {
+      return;
+    }
+
+    const newItem = {
+      itemId: this.state.itemId,
+      description: this.state.description,
+    };
+
+    const updatedTodoList = [...this.state.items, newItem];
+
+    this.setState({
+      itemId: uuidv4(),
+      items: updatedTodoList,
+      description: '',
+      editItem: false,
+    });
+
   }
 
   handleClearList = () => {
-    console.log('Clear list');
+    // console.log('Clear list');
+    this.setState({
+      items: [],
+    });
   }
 
   handleDeleteItem = (itemId) => {
@@ -63,13 +90,15 @@ export default class App extends Component {
           <div className="row">
             <div className="col-10 mx-auto col-md-8 mt-5">
               <TodoInput
+                description={this.state.description}
                 //           TodoInputProps
+                item={''}
                 // -------------------------------------
                 handleSubmit={this.handleSubmit}
                 handleChange={this.handleChange}
                 // -------------------------------------
               />
-              <TodoList 
+              <TodoList
                 //           TodoListProps
                 // -------------------------------------
                 items={this.state.items.slice()}
@@ -77,7 +106,7 @@ export default class App extends Component {
                 handleDeleteItem={this.handleDeleteItem}
                 handleEditItem={this.handleEditItem}
                 handleClearList={this.handleClearList}
-                // -------------------------------------
+              // -------------------------------------
               />
             </div>
           </div>

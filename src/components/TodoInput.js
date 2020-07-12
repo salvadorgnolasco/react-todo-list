@@ -23,20 +23,29 @@ export default class TodoInput extends Component {
     return (
       <div>
         <h3 className="text-capitilize text-center">Todo input</h3>
-        <input 
-          type="text" 
-          className="form-control mb-2" 
-          placeholder="Add a todo item..."
-          onChange={this.props.handleChange} 
-          name="todoItem"
-          />
-        <button 
-          type="button" 
-          className="btn btn-primary btn-lg btn-block p-1"
-          onClick={this.props.handleSubmit}
-          >
-          Submit
-        </button>
+        <div className="card card-body my-3">
+          <form onSubmit={this.props.handleSubmit}>
+            <div className="input-group">
+              <div className="input-group-prepend"></div>
+              <div className="input-group-prepend"></div>
+              <div className="input-group-text bg-primary text-white">
+                <i className="fas fa-book" />
+              </div>
+              <input
+                type="text"
+                className="form-control text-capitalize"
+                placeholder="Add todo item..."
+                onChange={this.props.handleChange}
+                name="todoItem"
+                value={this.props.description}
+              />
+            </div>
+            <button type="submit" 
+              className="btn btn-block btn-primary mt-3 text-uppercase"> 
+              Add item 
+            </button>
+          </form>
+        </div>
       </div>
     )
   }
