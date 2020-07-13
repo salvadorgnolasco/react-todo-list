@@ -18,6 +18,7 @@
 
 import TodoList from './components/TodoList';
 import TodoInput from './components/TodoInput';
+import Timer from './components/Timer';
 
 import { v4 as uuidv4 } from 'uuid';
 
@@ -30,21 +31,57 @@ import 'bootstrap/dist/css/bootstrap.css';
  * App
  */
 export default class App extends Component {
-  state = {
-    items: [
-      { itemId: uuidv4(), description: 'wake up' },
-      { itemId: uuidv4(), description: 'do homework' }],
-    itemId: uuidv4(),
-    description: '',
-    editItem: false,
-  };
 
+  /**
+   * Constructor
+   * It defines all initial values for state
+   * @param {*} props 
+   */
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      items: [
+        { itemId: uuidv4(), description: 'wake up' },
+        { itemId: uuidv4(), description: 'do homework' }],
+      itemId: uuidv4(),
+      description: '',
+      editItem: false,
+      time: new Date(),
+    };
+  }
+
+  /**
+   * Given a rendered application
+   * When all components have been mounted
+   * Then a process will be thrown in order to show current time
+   */
+  componentDidMount() {
+    const tick = () => {
+      this.setState({
+        time: new Date()
+      });
+    };
+
+    this.timerId = setInterval(() => tick(), 1000);
+  }
+
+  /**
+   * Given a new Item
+   * When the user type it on the text box
+   * Then the todo item will be saved within the state
+   */
   handleChange = (e) => {
     this.setState({
       description: e.target.value,
     });
   }
 
+  /**
+   * Given a new Item
+   * When the user add it
+   * Then the new todo item will be render within the Todo list
+   */
   handleSubmit = (e) => {
     e.preventDefault();
 
@@ -61,9 +98,13 @@ export default class App extends Component {
       description: '',
       editItem: false,
     });
-
   }
 
+  /**
+   * Given a list of todo items
+   * When a user wanted to delete all items
+   * Then the Todo List will show no items
+   */
   handleClearList = () => {
     // console.log('Clear list');
     this.setState({
@@ -71,6 +112,11 @@ export default class App extends Component {
     });
   }
 
+  /**
+   * Given a Todo item 
+   * When a user wanted to delete it
+   * Then the todo item will be removed from the todo list
+   */
   handleDeleteItem = (itemId) => {
     const items = this.state.items.filter((item) => item.itemId !== itemId);
     this.setState({
@@ -78,6 +124,12 @@ export default class App extends Component {
     });
   }
 
+  /**
+   * Given a todo item
+   * When a user wanted to edit it
+   * Then it will be rendered within the TodoInput component
+   * And show a green edit button
+   */
   handleEditItem = (itemId) => {
     const filteredItems = this.state.items.filter((item) => item.itemId !== itemId);
     const item = this.state.items.find((item) => item.itemId === itemId);
@@ -90,12 +142,18 @@ export default class App extends Component {
     });
   }
 
+  /**
+   * Todo list Application
+   * should be composed by an input component and 
+   * a list of element of things to do
+   */
   render() {
     return (
       <section>
         <div className="container">
           <div className="row">
             <div className="col-10 mx-auto col-md-8 mt-5">
+              <Timer time={this.state.time.toLocaleString()} />
               <TodoInput
                 //           TodoInputProps
                 description={this.state.description}
@@ -105,7 +163,7 @@ export default class App extends Component {
                 handleChange={this.handleChange}
               // -------------------------------------
               />
-              <TodoList 
+              <TodoList
                 //           TodoListProps
                 // -------------------------------------
                 items={this.state.items.slice()}
